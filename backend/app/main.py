@@ -7,10 +7,15 @@ from . import models  # noqa: F401 — registers all ORM models before create_al
 
 Base.metadata.create_all(bind=engine)
 
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.openapi.models import OAuthFlows, OAuthFlowPassword
+from fastapi.openapi.utils import get_openapi
+
 app = FastAPI(
     title="Task Manager API",
     description="Full-stack task manager with JWT auth, RBAC, and real-time WebSocket updates.",
     version="1.0.0",
+    swagger_ui_parameters={"persistAuthorization": True},
 )
 
 app.add_middleware(

@@ -17,9 +17,11 @@ export default function Login() {
 
   const mutation = useMutation({
     mutationFn: ({ email, password }: FormValues) => authApi.login(email, password),
-    onSuccess: async (token) => {
+    onSuccess: async (tokenData) => {
+      // Store token first so the axios interceptor can attach it to the /me request
+      useAuthStore.setState({ token: tokenData.access_token })
       const user = await authApi.me()
-      setAuth(user, token.access_token)
+      setAuth(user, tokenData.access_token)
       navigate('/')
     },
     onError: () => toast.error('Invalid email or password'),
