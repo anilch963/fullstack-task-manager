@@ -18,7 +18,7 @@ def _require_project_access(project_id: int, user: User, db: Session):
         raise HTTPException(status_code=403, detail="Access denied")
 
 
-@router.get("/", response_model=list[TaskOut])
+@router.get("", response_model=list[TaskOut])
 def list_tasks(
     project_id: int,
     status: Optional[TaskStatus] = None,
@@ -35,7 +35,7 @@ def list_tasks(
     return q.order_by(Task.status, Task.position).all()
 
 
-@router.post("/", response_model=TaskOut, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=TaskOut, status_code=status.HTTP_201_CREATED)
 async def create_task(task_in: TaskCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     _require_project_access(task_in.project_id, current_user, db)
     position = db.query(Task).filter(Task.project_id == task_in.project_id, Task.status == task_in.status).count()

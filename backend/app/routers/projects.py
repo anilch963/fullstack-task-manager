@@ -31,7 +31,7 @@ def check_access(project_id: int, user: User, db: Session, min_role: ProjectRole
     return membership
 
 
-@router.get("/", response_model=List[ProjectOut])
+@router.get("", response_model=List[ProjectOut])
 def list_projects(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if current_user.role == "admin":
         return db.query(Project).all()
@@ -39,7 +39,7 @@ def list_projects(db: Session = Depends(get_db), current_user: User = Depends(ge
     return db.query(Project).filter(Project.id.in_(project_ids)).all()
 
 
-@router.post("/", response_model=ProjectOut, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ProjectOut, status_code=status.HTTP_201_CREATED)
 def create_project(project_in: ProjectCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     project = Project(**project_in.model_dump())
     db.add(project)
